@@ -34,17 +34,12 @@ const ReportTable = ({ data, onViewDetails }) => {
               <td className="py-3 px-6 text-sm text-gray-700">{build.build_id}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{new Date(build.datetimestamp).toLocaleString()}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.website}</td>
-              <td className="py-3 px-6 text-sm text-gray-700">{build.page_url}</td>
+              <td className="py-3 px-6 text-sm text-gray-700"> <a href={build.pageurl} target="_blank" className="text-blue-500 hover:underline">{build.page_url}</a></td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.page}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.performance}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.seo}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.bestPractices}</td>
               <td className="py-3 px-6 text-sm text-gray-700">{build.accessibility}</td>
-              <td className="py-3 px-6 text-sm text-gray-700">
-                <a href={build.pageurl} target="_blank" className="text-blue-500 hover:underline">
-                  {build.pageurl}
-                </a>
-              </td>
               <td className="py-3 px-6 text-sm">
                 <button
                   onClick={() => onViewDetails(build.build_id)}
