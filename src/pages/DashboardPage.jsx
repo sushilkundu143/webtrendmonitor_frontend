@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import builds from '../data/dashboardData';
-import Graph from '../components/Graph.jsx';
+import GraphComponent from '../components/GraphComponent';
 import ReportTable from '../components/ReportTable';
-import DonutChart from '../components/DonutChart.jsx';
+import DonutChart from '../components/DonutChart';
 import CardComponent from '../components/CardComponent';
 
 const DashboardPage = () => {
@@ -89,7 +89,7 @@ const DashboardPage = () => {
 
         {/* Right Section - 60% for Graph */}
         <div className="col-span-3">
-          <Graph data={buildData} />
+          <GraphComponent data={buildData} />
         </div>
       </div>
 

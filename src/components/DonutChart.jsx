@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import PropTypes from 'prop-types';
 
 const DonutChart = ({ value, title }) => {
   const ref = useRef();
@@ -53,6 +54,12 @@ const DonutChart = ({ value, title }) => {
       <div className="mt-4 text-lg font-semibold text-gray-700">{title}</div>
     </div>
   );
+};
+
+// Prop validation using PropTypes
+DonutChart.propTypes = {
+  value: PropTypes.number.isRequired, // 'value' must be a number and is required
+  title: PropTypes.string.isRequired, // 'title' must be a string and is required
 };
 
 export default DonutChart;

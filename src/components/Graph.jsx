@@ -1,115 +1,146 @@
-import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
+import { useEffect, useRef } from "react";
+import * as d3 from "d3";
+import PropTypes from "prop-types";
 
-const Graph = ({ data }) => {
-  const [selectedTab, setSelectedTab] = useState('All'); // State to track the selected tab
+const Graph = ({ data, width }) => {
   const ref = useRef();
 
   const colors = {
-    SEO: 'steelblue',
-    'Best Practices': 'orange',
-    Performance: 'green',
-    Accessibility: 'red',
-  };
-
-  // Handle tab selection
-  const handleTabChange = (tab) => {
-    setSelectedTab(tab);
+    SEO: "steelblue",
+    "Best Practices": "orange",
+    Performance: "green",
+    Accessibility: "red",
   };
 
   useEffect(() => {
-    const width = 800;
-    const height = 400;
+    const height = 500;
 
     // Set up margins and dimensions for the graph
-    const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+    const margin = { top: 30, right: 30, bottom: 40, left: 40 };
     const svgWidth = width - margin.left - margin.right;
     const svgHeight = height - margin.top - margin.bottom;
 
-    // Select the parent div to append the SVG graph
     const svgContainer = d3.select(ref.current);
-    svgContainer.selectAll('*').remove(); // Clear any existing elements
+    svgContainer.selectAll("*").remove(); // Clear any existing elements
 
-    // Create the SVG element
     const svg = svgContainer
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-    // Create scale for the x-axis (using build_id for categorical x-axis)
-    const x = d3.scaleBand()
-      .domain(data.map(d => d.build_id)) // Use build_id for categorical x-axis
+    const graphContent = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3
+      .scaleBand()
+      .domain(data.map((d) => d.build_id))
       .range([0, svgWidth])
       .padding(0.1);
 
-    // Create scale for the y-axis with a domain of 0 to 100
-    const y = d3.scaleLinear()
-      .domain([0, 100])  // Setting Y-axis range from 0 to 100
-      .range([svgHeight, 0]);
+    const y = d3.scaleLinear().domain([0, 100]).range([svgHeight, 0]);
 
-    // Add X and Y axes to the graph
-    svg.append('g')
-      .attr('transform', `translate(0,${svgHeight})`)
+    graphContent
+      .append("g")
+      .attr("transform", `translate(0,${svgHeight})`)
       .call(d3.axisBottom(x))
-      .selectAll('text')
-      .style('font-size', '5px'); // Set font size for build_id labels
+      .selectAll("text")
+      .style("font-size", "5px");
 
-    svg.append('g')
-      .call(d3.axisLeft(y)); // Draw the Y-axis
+    graphContent.append("g").call(d3.axisLeft(y).ticks(11));
 
-    // Define line generators for each metric
+    // Tooltip setup
+    const tooltip = d3
+      .select(ref.current)
+      .append("div")
+      .style("position", "absolute")
+      .style("background", "white")
+      .style("border", "1px solid gray")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+      .style("pointer-events", "none")
+      .style("opacity", 0);
+
     const lineGenerators = {
-      SEO: d3.line()
+      SEO: d3
+        .line()
         .x((d) => x(d.build_id) + x.bandwidth() / 2)
         .y((d) => y(d.seo || 0)),
-      'Best Practices': d3.line()
+      "Best Practices": d3
+        .line()
         .x((d) => x(d.build_id) + x.bandwidth() / 2)
-        .y((d) => y(d.best_practices || 0)),
-      Performance: d3.line()
+        .y((d) => y(d.bestPractices || 0)),
+      Performance: d3
+        .line()
         .x((d) => x(d.build_id) + x.bandwidth() / 2)
         .y((d) => y(d.performance || 0)),
-      Accessibility: d3.line()
+      Accessibility: d3
+        .line()
         .x((d) => x(d.build_id) + x.bandwidth() / 2)
         .y((d) => y(d.accessibility || 0)),
     };
 
-    // Clear any existing lines and redraw the lines for the selected metrics
-    svg.selectAll('.line').remove();
+    // Plot lines for each metric
+    Object.keys(colors).forEach((metric) => {
+      graphContent
+        .append("path")
+        .datum(data)
+        .attr("d", lineGenerators[metric])
+        .style("fill", "none")
+        .style("stroke", colors[metric])
+        .style("stroke-width", 2);
 
-    // Plot lines based on the selected tab
-    const selectedMetrics = selectedTab === 'All'
-      ? ['SEO', 'Best Practices', 'Performance', 'Accessibility']
-      : [selectedTab];
-
-    selectedMetrics.forEach((metric) => {
-      svg.append('path')
-        .attr('class', 'line')
-        .attr('d', lineGenerators[metric](data))
-        .style('fill', 'none')
-        .style('stroke', colors[metric]) // Use the specific color for each metric
-        .style('stroke-width', 2);
+      // Add points for each metric
+      graphContent
+        .selectAll(`.dot-${metric}`)
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("class", `dot-${metric}`)
+        .attr("cx", (d) => x(d.build_id) + x.bandwidth() / 2)
+        .attr("cy", (d) => y(d[metric.toLowerCase()] || 0))
+        .attr("r", 4)
+        .attr("fill", colors[metric])
+        .style("cursor", "pointer")
+        .on("mouseover", function (event, d) {
+          d3.select(this).attr("r", 6); // Highlight the point
+          const [xPos, yPos] = d3.pointer(event); // Get the relative coordinates
+          tooltip
+            .style("opacity", 1)
+            .html(
+              `<strong>${metric}</strong>: ${d[metric.toLowerCase()] || "N/A"}`
+            )
+            .style("left", `${xPos + 10}px`) // Adjust tooltip position relative to the point
+            .style("top", `${yPos - 20}px`);
+        })
+        .on("mousemove", function (event) {
+          const [xPos, yPos] = d3.pointer(event); // Update relative coordinates
+          tooltip
+            .style("left", `${xPos + 10}px`)
+            .style("top", `${yPos - 20}px`);
+        })
+        .on("mouseout", function () {
+          d3.select(this).attr("r", 4); // Reset point size
+          tooltip.style("opacity", 0); // Hide tooltip
+        });
     });
+  }, [data, width]);
 
-  }, [data, selectedTab]); // Re-render when data or selectedTab changes
-
-  return (
-    <div>
-      {/* Tabs for selecting metric */}
-      <div className="flex space-x-4 mb-4">
-        {['All', 'SEO', 'Best Practices', 'Performance', 'Accessibility'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => handleTabChange(tab)}
-            className={`px-4 py-2 rounded-md ${selectedTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      <div ref={ref}></div>
-    </div>
-  );
+  return <div ref={ref} className="pt-2 relative"></div>;
 };
+
+// Prop validation
+Graph.propTypes = {
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        build_id: PropTypes.number.isRequired,
+        seo: PropTypes.number,
+        bestPractices: PropTypes.number,
+        performance: PropTypes.number,
+        accessibility: PropTypes.number,
+      })
+    ).isRequired,
+    width: PropTypes.number.isRequired,
+  };
 
 export default Graph;
