@@ -7,9 +7,12 @@ const DonutChart = ({ value, title }) => {
 
   useEffect(() => {
     const max = 100;
-    const width = 170;  // Adjusted width
-    const height = 170;  // Adjusted height
+    const width = 170; // Adjusted width
+    const height = 170; // Adjusted height
     const radius = Math.min(width, height) / 2;
+
+    // Clear previous chart content
+    d3.select(ref.current).selectAll('*').remove();
 
     const arc = d3.arc().innerRadius(radius - 20).outerRadius(radius);
     const pie = d3.pie().value((d) => d)([value, max - value]);
@@ -21,15 +24,16 @@ const DonutChart = ({ value, title }) => {
       .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
     // Add the arcs for the donut slices with animation
-    const path = svg.selectAll('path')
+    svg.selectAll('path')
       .data(pie)
-      .enter().append('path')
+      .enter()
+      .append('path')
       .attr('d', arc)
       .attr('fill', (d, i) => (i === 0 ? '#4caf50' : '#e0e0e0'))
       .attr('opacity', 0)
       .transition()
       .duration(1000)
-      .attr('opacity', 1)  // Fade in the slices
+      .attr('opacity', 1)
       .attrTween('d', function (d) {
         const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, d); // Start with 0 angle
         return function (t) {
@@ -45,7 +49,7 @@ const DonutChart = ({ value, title }) => {
       .attr('font-size', '16px')
       .attr('font-weight', 'bold')
       .text(`${Math.round((value / max) * 100)}%`);
-  }, [value]);
+  }, [value]); // Re-run the effect when 'value' changes
 
   return (
     <div className="flex flex-col items-center justify-center p-4">

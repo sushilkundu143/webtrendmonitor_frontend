@@ -41,7 +41,7 @@ const DashboardPage = () => {
   return (
     <div className="p-6">
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center mb-6">
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
         {/* Page Dropdown */}
