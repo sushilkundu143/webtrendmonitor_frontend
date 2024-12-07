@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getLocalStorage } from '../utils/localStorageUtils';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check the value of `isRegister` in localStorage
+    const isRegister = getLocalStorage('isRegister');
+
+    if (isRegister) {
+      navigate('/dashboard');
+    } else {
+      navigate('/register');
+    }
+  }, [navigate]);
 
   const handleLogin = () => {
     if (email === 'webtrendmonitor@gmail.com' && password === 'welcome1') {

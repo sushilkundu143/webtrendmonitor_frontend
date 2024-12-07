@@ -133,7 +133,7 @@ const Graph = ({ data, width }) => {
 Graph.propTypes = {
     data: PropTypes.arrayOf(
       PropTypes.shape({
-        build_id: PropTypes.number.isRequired,
+        build_id: PropTypes.string.isRequired,
         seo: PropTypes.number,
         bestPractices: PropTypes.number,
         performance: PropTypes.number,
