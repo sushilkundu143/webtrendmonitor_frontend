@@ -5,12 +5,6 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   plugins: [
     react()
-  ],
-  build: {
-    reportCompressedSize: true, // Report compressed sizes of the build files
-    cssMinify: true,
-    cssCodeSplit: true,
-    minify: true
-  },
+  ]
 })
 
