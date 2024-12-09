@@ -22,7 +22,7 @@ function App() {
   return (
     <>
       {!isLoading && (
-        <Router>
+        <Router basename="/webtrendmonitor_frontend">
           <Routes>
             <Route path='/' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
