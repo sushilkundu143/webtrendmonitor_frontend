@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import DetailsPage from './pages/DetailsPage';
@@ -22,7 +22,7 @@ function App() {
   return (
     <>
       {!isLoading && (
-        <Router basename="/webtrendmonitor_frontend">
+        <Router>
           <Routes>
             <Route path='/' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
