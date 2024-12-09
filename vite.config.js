@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [
     react()
   ],
-  // base: '/webtrendmonitor_frontend/',
+  base: '/webtrendmonitor_frontend/',
 })
 
