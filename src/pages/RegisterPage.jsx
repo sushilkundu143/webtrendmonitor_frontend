@@ -1,16 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getLocalStorage } from '../utils/localStorageUtils';
 
 function RegisterPage() {
   const [sitemap, setSitemap] = useState('');
   const [buildId, setBuildId] = useState('');
+  const navigate = useNavigate();
 
   // Mutation to handle API call
   const mutation = useMutation(async (data) => {
     const response = await axios.post('/api/register', data);
     return response.data;
   });
+
+  useEffect(() => {
+    // Check the value of `isRegister` in localStorage
+    const isRegister = getLocalStorage('isRegister');
+
+    if (isRegister == true) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   // Submit Handler
   const handleSubmit = (e) => {

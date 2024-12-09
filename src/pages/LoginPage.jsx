@@ -11,9 +11,9 @@ const LoginPage = () => {
     // Check the value of `isRegister` in localStorage
     const isRegister = getLocalStorage('isRegister');
 
-    if (isRegister) {
+    if (isRegister == true) {
       navigate('/dashboard');
-    } else {
+    } else if(isRegister == false) {
       navigate('/register');
     }
   }, [navigate]);
