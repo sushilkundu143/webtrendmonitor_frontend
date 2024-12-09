@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://<username>.github.io/webtrendmonitor_frontendgit s",
+  "homepage": "https://<username>.github.io/webtrendmonitor_frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
