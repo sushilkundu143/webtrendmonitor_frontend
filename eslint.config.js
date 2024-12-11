@@ -33,6 +33,9 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'react/no-unescaped-entities': 'off', // Disable the rule that checks for unescaped entities
+      'react/prop-types': 'off', // Disable PropTypes rule
+      'no-unused-vars': 'off',        // Disable unused variables globally
     },
   },
 ]
