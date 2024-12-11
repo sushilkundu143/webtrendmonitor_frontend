@@ -27,7 +27,7 @@ function App() {
             <Route path='/' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/dashboard' element={<DashboardPage data={data} />} />
-            <Route path='/details/:buildId' element={<DetailsPage />} />
+            <Route path='/details/:buildId/:pageName' element={<DetailsPage />} />
           </Routes>
         </Router>
       )}

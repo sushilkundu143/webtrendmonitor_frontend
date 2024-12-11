@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://api.example.com'; // Replace with your actual API base URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const fetchLighthouseReport = async (pageUrl) => {
+export const fetchLighthouseReport = async (buildId, pageName) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/lighthouse`, {
-      params: { url: pageUrl },
+    const response = await axios.get(`${API_BASE_URL}/lighthouse/run-viewDetails`, {
+      params: { buildId, pageName },
     });
     return response.data; // Assuming the response contains the Lighthouse data
   } catch (error) {
