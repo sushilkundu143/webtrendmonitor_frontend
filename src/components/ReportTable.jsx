@@ -61,9 +61,9 @@ const ReportTable = ({ data, onViewDetails }) => {
           </tr>
         </thead>
         <tbody>
-          {currentRecords?.map((build) => (
+          {currentRecords?.map((build, index) => (
             <tr
-              key={build.build_id}
+              key={`tr-${index}`}
               className='border-t border-gray-200 hover:bg-gray-50'
             >
               <td className='py-3 px-6 text-sm text-gray-700'>
@@ -100,7 +100,7 @@ const ReportTable = ({ data, onViewDetails }) => {
               </td>
               <td className='py-3 px-6 text-sm'>
                 <button
-                  onClick={() => onViewDetails(build.build_id)}
+                  onClick={() => onViewDetails(build.build_id, build.page_name)}
                   className='text-blue-500 hover:text-blue-700 font-semibold'
                 >
                   View Details
@@ -124,7 +124,7 @@ const ReportTable = ({ data, onViewDetails }) => {
           {[...Array(Math.ceil(data?.length / recordsPerPage))]?.map(
             (_, index) => (
               <button
-                key={index}
+              key={`pg-${index}`}
                 onClick={() => paginate(index + 1)}
                 className={`px-4 py-2 text-sm font-semibold rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'} hover:bg-blue-300`}
               >

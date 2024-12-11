@@ -29,8 +29,8 @@ const DashboardPage = ({ data }) => {
     }
   }, [data]);
 
-  const handleViewDetails = (buildId) => {
-    navigate(`/details/${buildId}`);
+  const handleViewDetails = (buildId, page_name) => {
+    navigate(`/details/${buildId}/${encodeURIComponent(page_name)}`);
   };
 
   const handlePageChange = (page) => {
@@ -56,7 +56,7 @@ const DashboardPage = ({ data }) => {
             onChange={(e) => handlePageChange(e.target.value)}
             className='px-4 py-2 border rounded-md'
           >
-            {pages.map((page) => (
+            {pages.map((page, index) => (
               <option key={page} value={page}>
                 {page?.charAt(0).toUpperCase() + page?.slice(1)}
               </option>
