@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import DetailsPage from './pages/DetailsPage';
 import RegisterPage from './pages/RegisterPage';
+import AccessibilityChecker from './pages/AccessibilityChecker';
 import axiosInstance from './axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route path='/' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
+            <Route path='/accessibilitychecker' element={<AccessibilityChecker />} />
             <Route path='/dashboard' element={<DashboardPage data={data} />} />
             <Route path='/details/:buildId/:pageName' element={<DetailsPage />} />
           </Routes>
