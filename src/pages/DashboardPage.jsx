@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import builds from '../data/dashboardData';
 import GraphComponent from '../components/GraphComponent';
 import ReportTable from '../components/ReportTable';
 import DonutChart from '../components/DonutChart';
@@ -22,7 +21,7 @@ const DashboardPage = ({ data }) => {
       setPages(getUniquePages(data));
 
       // Filter the latest build for the default homepage
-      const homePageBuild = builds.find((build) => build.page === 'home');
+      const homePageBuild = data.find((build) => build.page === 'home');
       if (homePageBuild) {
         setHomePageData(homePageBuild);
       }
@@ -35,7 +34,7 @@ const DashboardPage = ({ data }) => {
 
   const handlePageChange = (page) => {
     setSelectedPage(page);
-    const selectedPageBuild = builds.find((build) => build.page === page);
+    const selectedPageBuild = data.find((build) => build.page === page);
     setHomePageData(selectedPageBuild || null); // Update data based on selected page
   };
 
@@ -62,6 +61,13 @@ const DashboardPage = ({ data }) => {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className='ml-4'>
+          <label htmlFor='page-select' className='mr-2 font-bold'>
+            Build ID:
+          </label>
+          <input readOnly value={homePageData?.build_id} />
         </div>
       </div>
 
@@ -101,7 +107,7 @@ const DashboardPage = ({ data }) => {
               <DonutChart title='SEO' value={homePageData.seo} />
               <DonutChart
                 title='Best Practices'
-                value={homePageData.bestPractices}
+                value={homePageData.best_practices}
               />
               <DonutChart
                 title='Accessibility'
