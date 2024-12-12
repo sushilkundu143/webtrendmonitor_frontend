@@ -6,21 +6,30 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const MODE = import.meta.env.MODE;
+  const VITE_IS_REGISTER = import.meta.env.VITE_IS_REGISTER;
+  // useEffect(() => {
+  //   // Check the value of `isRegister` in localStorage
+  //   const isRegister = getLocalStorage('isRegister');
 
-  useEffect(() => {
-    // Check the value of `isRegister` in localStorage
-    const isRegister = getLocalStorage('isRegister');
-
-    if (isRegister) {
-      navigate('/dashboard');
-    } else {
-      navigate('/register');
-    }
-  }, [navigate]);
+  //   if (isRegister) {
+  //     navigate('/dashboard');
+  //   } else {
+  //     navigate('/register');
+  //   }
+  // }, [navigate]);
 
   const handleLogin = () => {
     if (email === 'webtrendmonitor@gmail.com' && password === 'welcome1') {
-      navigate('/dashboard');
+      if (MODE === 'development') {
+        if (VITE_IS_REGISTER == 'true') {
+          navigate('/dashboard');
+        } else {
+          navigate('/register');
+        }
+      } else {
+        navigate('/dashboard');
+      }
     } else {
       alert('Invalid credentials');
     }
