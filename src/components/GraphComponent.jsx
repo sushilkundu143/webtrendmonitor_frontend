@@ -24,7 +24,7 @@ const GraphComponent = ({ data, selectedPage }) => {
     return pageData.map((d) => ({
       ...d,
       seo: selectedTab === 'SEO' ? d.seo : null,
-      bestPractices: selectedTab === 'Best Practices' ? d.bestPractices : null,
+      bestPractices: selectedTab === 'Best Practices' ? d.best_practices : null,
       performance: selectedTab === 'Performance' ? d.performance : null,
       accessibility: selectedTab === 'Accessibility' ? d.accessibility : null,
     }));
@@ -52,22 +52,28 @@ const GraphComponent = ({ data, selectedPage }) => {
   const filteredData = getFilteredData();
 
   return (
-    <div className="w-full" ref={containerRef}>
+    <div className='w-full' ref={containerRef}>
       {/* Tabs for selecting metric */}
-      <div className="flex space-x-4 mb-4">
-        {['All', 'SEO', 'Best Practices', 'Performance', 'Accessibility'].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => handleTabChange(tab)}
-            className={`px-4 py-2 rounded-md ${selectedTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className='flex space-x-4 mb-4'>
+        {['All', 'SEO', 'Best Practices', 'Performance', 'Accessibility'].map(
+          (tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`px-4 py-2 rounded-md ${selectedTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            >
+              {tab}
+            </button>
+          )
+        )}
       </div>
 
       {/* Pass filtered data, selectedTab, and containerWidth to Graph */}
-      <Graph data={filteredData} selectedTab={selectedTab} width={containerWidth} />
+      <Graph
+        data={filteredData}
+        selectedTab={selectedTab}
+        width={containerWidth}
+      />
     </div>
   );
 };
