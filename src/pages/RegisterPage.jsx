@@ -30,8 +30,12 @@ function RegisterPage() {
 
     setIsLoading(true);
     try {
+      // http://localhost:4200/api/lighthouse/run-lighthouse?sitemapUrl=https://hackathon-website-nu.vercel.app/sitemap.xml&buildId=89shk293
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
       // Perform API call
-      const response = await axios.post('http://localhost:4200/api/register', { sitemap, buildId });
+      const response = await axios.get(`${apiBase}/lighthouse/run-lighthouse`, {
+        params: { sitemapUrl: sitemap, buildId }, // Pass parameters as query string
+      });
 
       alert('Registration successful!');
       console.log('Response:', response.data);
