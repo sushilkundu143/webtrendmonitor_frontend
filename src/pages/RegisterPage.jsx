@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getLocalStorage } from '../utils/localStorageUtils';
@@ -7,13 +6,8 @@ import { getLocalStorage } from '../utils/localStorageUtils';
 function RegisterPage() {
   const [sitemap, setSitemap] = useState('');
   const [buildId, setBuildId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  // Mutation to handle API call
-  const mutation = useMutation(async (data) => {
-    const response = await axios.post('/api/register', data);
-    return response.data;
-  });
 
   useEffect(() => {
     // Check the value of `isRegister` in localStorage
@@ -25,7 +19,7 @@ function RegisterPage() {
   }, [navigate]);
 
   // Submit Handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Ensure both fields are filled
@@ -34,20 +28,19 @@ function RegisterPage() {
       return;
     }
 
-    // Trigger the mutation
-    mutation.mutate(
-      { sitemap, buildId },
-      {
-        onSuccess: (data) => {
-          alert('Registration successful!');
-          console.log('Response:', data);
-        },
-        onError: (error) => {
-          alert('An error occurred during registration.');
-          console.error('Error:', error);
-        },
-      }
-    );
+    setIsLoading(true);
+    try {
+      // Perform API call
+      const response = await axios.post('http://localhost:4200/api/register', { sitemap, buildId });
+
+      alert('Registration successful!');
+      console.log('Response:', response.data);
+    } catch (error) {
+      alert('An error occurred during registration.');
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -95,13 +88,11 @@ function RegisterPage() {
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
-        {mutation.isLoading && (
-          <p className="text-center text-sm text-gray-500 mt-4">Submitting...</p>
-        )}
       </div>
     </div>
   );

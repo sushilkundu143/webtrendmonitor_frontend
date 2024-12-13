@@ -24,9 +24,6 @@ const DetailsPage = () => {
       <h1 className="text-2xl font-bold text-center">Detailed Lighthouse Report</h1>
 
       {report ? (
-        // <pre className="bg-gray-100 p-4 rounded">
-        //   {JSON.stringify(report, null, 2)}
-        // </pre>
         <LighthouseReportComponent />
       ) : (
         <p>Loading...</p>
